@@ -23,6 +23,8 @@ const STACK_ITEMS = [
 
   // AI / ML & NLP
   { name: 'Gemini Flash API', category: 'AI & LLM' },
+  { name: 'RAG Pipelines', category: 'AI & LLM' },
+  { name: 'LLM Workflows', category: 'Agentic AI' },
   { name: 'TensorFlow', category: 'AI / ML' },
   { name: 'PyTorch', category: 'AI / ML' },
   { name: 'Scikit-learn', category: 'AI / ML' },
@@ -40,9 +42,7 @@ const STACK_ITEMS = [
   { name: 'Django', category: 'Backend' },
   { name: 'SQLite', category: 'Database' },
 
-  // Cloud & Dev Tools
-  { name: 'AWS EC2', category: 'Cloud' },
-  { name: 'DevOps Pipelines', category: 'DevOps' },
+  // Dev Tools
   { name: 'Git', category: 'Dev Tools' },
   { name: 'VS Code', category: 'Dev Tools' },
   { name: 'Google Colab', category: 'Dev Tools' },
@@ -73,7 +73,7 @@ export const StackSection: React.FC = () => {
           data-build="type"
           className="text-xs sm:text-sm text-zinc-300 font-sans mt-2"
         >
-          Every tool, library, and prompt engineering architecture directly from my resume.
+          Production-proven AI/ML frameworks, prompt architectures, RAG pipelines, and development tools.
         </p>
       </div>
 

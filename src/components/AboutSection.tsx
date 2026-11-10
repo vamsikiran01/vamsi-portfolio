@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { User, CheckCircle, Lightbulb, Target, Users, Sparkles } from 'lucide-react';
+import { User, Lightbulb, Target, Users, Sparkles } from 'lucide-react';
 
 export const AboutSection: React.FC = () => {
   return (
@@ -40,7 +40,7 @@ export const AboutSection: React.FC = () => {
             data-build="type"
             className="text-sm sm:text-base text-zinc-200 leading-relaxed font-sans"
           >
-            With a growing focus on agentic AI and autonomous LLM-driven workflows, I am passionate about building reliable software and solving real-world challenges through clean, adaptable thinking. From managing cloud infrastructure on AWS EC2 to architecting Django full-stack systems and integrating the Gemini Flash API, I emphasize resilient code and testable outcomes.
+            With a growing focus on agentic AI, RAG pipelines, and autonomous LLM-driven workflows, I am passionate about building reliable software and solving real-world challenges through clean, adaptable thinking. From architecting Django full-stack systems to integrating the Gemini Flash API and engineering structured prompt workflows, I emphasize resilient code and testable outcomes.
           </p>
 
           <div
