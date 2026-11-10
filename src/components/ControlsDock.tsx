@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { Play, Pause, Bot, BotOff, Film, X } from 'lucide-react';
 
 interface ControlsDockProps {
@@ -11,6 +11,8 @@ interface ControlsDockProps {
   isTouring: boolean;
   onStartTour: () => void;
   onStopTour: () => void;
+  builtCount?: number;
+  totalCount?: number;
 }
 
 export const ControlsDock: React.FC<ControlsDockProps> = ({
@@ -21,11 +23,12 @@ export const ControlsDock: React.FC<ControlsDockProps> = ({
   isTouring,
   onStartTour,
   onStopTour,
+  builtCount = 0,
+  totalCount = 68,
 }) => {
   // Keyboard shortcuts: T = tour, A = agents, P = pause, Esc = stop tour
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Ignore if user is inside an input/textarea
       if (
         e.target instanceof HTMLInputElement ||
         e.target instanceof HTMLTextAreaElement
@@ -55,18 +58,31 @@ export const ControlsDock: React.FC<ControlsDockProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isTouring, onStartTour, onStopTour, onToggleAgents, onTogglePause]);
 
+  const displayTotal = totalCount > 0 ? totalCount : 68;
+  const displayBuilt = Math.min(builtCount, displayTotal);
+
   return (
     <aside
       aria-label="Portfolio Controls"
-      className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] pointer-events-auto"
+      className="fixed bottom-5 left-1/2 -translate-x-1/2 z-[9999] pointer-events-auto"
     >
-      <div className="flex items-center gap-2 p-1.5 bg-[#09090b]/90 border border-zinc-800/90 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.8)] backdrop-blur-md">
+      <div className="flex items-center gap-1.5 sm:gap-2 p-1.5 bg-[#09090b]/95 border border-zinc-800 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.9)] backdrop-blur-md">
+        {/* Live Built Counter (like in preview video) */}
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-900/90 border border-zinc-800 font-mono text-[10px] sm:text-xs text-zinc-300">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          <span>
+            {displayBuilt}/{displayTotal} BUILT
+          </span>
+        </div>
+
+        <span className="w-px h-4 bg-zinc-800" />
+
         {/* Pause / Resume Button */}
         <button
           onClick={onTogglePause}
           title={isPaused ? 'Resume Build (P)' : 'Pause Build (P)'}
           aria-label={isPaused ? 'Resume Build' : 'Pause Build'}
-          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono font-medium rounded-full transition-all duration-150 text-zinc-300 hover:text-white hover:bg-zinc-800/80 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff3b2f]"
+          className="flex items-center gap-1 px-2.5 sm:px-3 py-1 text-xs font-mono font-medium rounded-full transition-all duration-150 text-zinc-300 hover:text-white hover:bg-zinc-800 active:scale-95 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#ff3b2f]"
         >
           {isPaused ? (
             <>
@@ -79,7 +95,7 @@ export const ControlsDock: React.FC<ControlsDockProps> = ({
               <span className="hidden sm:inline">Pause</span>
             </>
           )}
-          <kbd className="hidden md:inline-block px-1 py-0.2 text-[10px] bg-zinc-900 border border-zinc-700/60 rounded text-zinc-400">
+          <kbd className="hidden md:inline-block px-1 py-0.2 text-[9px] bg-zinc-900 border border-zinc-700/60 rounded text-zinc-400">
             P
           </kbd>
         </button>
@@ -91,24 +107,24 @@ export const ControlsDock: React.FC<ControlsDockProps> = ({
           onClick={onToggleAgents}
           title={isAgentsEnabled ? 'Disable Robot Agents (A)' : 'Enable Robot Agents (A)'}
           aria-label={isAgentsEnabled ? 'Disable Robot Agents' : 'Enable Robot Agents'}
-          className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono font-medium rounded-full transition-all duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff3b2f] ${
+          className={`flex items-center gap-1 px-2.5 sm:px-3 py-1 text-xs font-mono font-medium rounded-full transition-all duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#ff3b2f] ${
             isAgentsEnabled
-              ? 'text-white bg-zinc-800/90 shadow-inner'
+              ? 'text-white bg-zinc-800 border border-zinc-700/80 shadow-inner'
               : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-900/60'
           }`}
         >
           {isAgentsEnabled ? (
             <>
               <Bot className="w-3.5 h-3.5 text-[#ff3b2f]" />
-              <span>Agents On</span>
+              <span>Agents: ON</span>
             </>
           ) : (
             <>
               <BotOff className="w-3.5 h-3.5 text-zinc-500" />
-              <span>Agents Off</span>
+              <span>Agents: OFF</span>
             </>
           )}
-          <kbd className="hidden md:inline-block px-1 py-0.2 text-[10px] bg-zinc-900 border border-zinc-700/60 rounded text-zinc-400">
+          <kbd className="hidden md:inline-block px-1 py-0.2 text-[9px] bg-zinc-900 border border-zinc-700/60 rounded text-zinc-400">
             A
           </kbd>
         </button>
@@ -118,18 +134,18 @@ export const ControlsDock: React.FC<ControlsDockProps> = ({
         {/* Tour Button */}
         <button
           onClick={isTouring ? onStopTour : onStartTour}
-          title={isTouring ? 'Stop Tour (Esc)' : 'Cinematic Screen-Record Tour (T)'}
-          aria-label={isTouring ? 'Stop Tour' : 'Cinematic Screen-Record Tour'}
-          className={`flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-mono font-medium rounded-full transition-all duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff3b2f] ${
+          title={isTouring ? 'Stop Tour (Esc)' : 'Cinematic Tour (T)'}
+          aria-label={isTouring ? 'Stop Tour' : 'Cinematic Tour'}
+          className={`flex items-center gap-1 px-3 py-1 text-xs font-mono font-medium rounded-full transition-all duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#ff3b2f] ${
             isTouring
               ? 'bg-[#ff3b2f] text-white animate-pulse shadow-[0_0_15px_rgba(255,59,47,0.5)]'
-              : 'text-zinc-300 hover:text-white hover:bg-zinc-800/80'
+              : 'text-zinc-300 hover:text-white hover:bg-zinc-800'
           }`}
         >
           {isTouring ? (
             <>
               <X className="w-3.5 h-3.5 text-white" />
-              <span>Stop Tour</span>
+              <span>Stop</span>
             </>
           ) : (
             <>
@@ -137,7 +153,7 @@ export const ControlsDock: React.FC<ControlsDockProps> = ({
               <span>Tour</span>
             </>
           )}
-          <kbd className="hidden md:inline-block px-1 py-0.2 text-[10px] bg-zinc-900 border border-zinc-700/60 rounded text-zinc-400">
+          <kbd className="hidden md:inline-block px-1 py-0.2 text-[9px] bg-zinc-900 border border-zinc-700/60 rounded text-zinc-400">
             {isTouring ? 'ESC' : 'T'}
           </kbd>
         </button>

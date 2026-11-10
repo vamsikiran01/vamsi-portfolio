@@ -8,25 +8,23 @@ export interface AgentInfo {
   color: string;
   tagBg: string;
   tagText: string;
-  baseX: number; // percentage of viewport width (0.0 to 1.0)
-  baseY: number; // percentage of viewport height (0.0 to 1.0)
-  orbitSpeed: number;
-  orbitRadius: number;
+  slotIndex: number;
+  tier: 1 | 2; // Tier 1: lower bottom line, Tier 2: slightly higher bottom line
 }
 
 export const AGENT_REGISTRY: AgentInfo[] = [
-  { id: 'scout', name: 'Scout', color: '#3b82f6', tagBg: '#1e3a8a', tagText: '#93c5fd', baseX: 0.12, baseY: 0.22, orbitSpeed: 0.8, orbitRadius: 35 },
-  { id: 'layout', name: 'Layout', color: '#ff3b2f', tagBg: '#7f1d1d', tagText: '#fca5a5', baseX: 0.84, baseY: 0.18, orbitSpeed: 0.6, orbitRadius: 40 },
-  { id: 'typeset', name: 'Typeset', color: '#10b981', tagBg: '#064e3b', tagText: '#6ee7b7', baseX: 0.18, baseY: 0.52, orbitSpeed: 0.9, orbitRadius: 30 },
-  { id: 'motion', name: 'Motion', color: '#f59e0b', tagBg: '#78350f', tagText: '#fde68a', baseX: 0.82, baseY: 0.48, orbitSpeed: 0.7, orbitRadius: 45 },
-  { id: 'qa', name: 'QA', color: '#ec4899', tagBg: '#831843', tagText: '#fbcfe8', baseX: 0.88, baseY: 0.72, orbitSpeed: 0.85, orbitRadius: 35 },
-  { id: 'deploy', name: 'Deploy', color: '#8b5cf6', tagBg: '#4c1d95', tagText: '#ddd6fe', baseX: 0.14, baseY: 0.76, orbitSpeed: 0.65, orbitRadius: 38 },
-  { id: 'copy', name: 'Copy', color: '#06b6d4', tagBg: '#164e63', tagText: '#a5f3fc', baseX: 0.28, baseY: 0.35, orbitSpeed: 0.75, orbitRadius: 32 },
-  { id: 'lint', name: 'Lint', color: '#84cc16', tagBg: '#365314', tagText: '#bef264', baseX: 0.72, baseY: 0.32, orbitSpeed: 0.8, orbitRadius: 36 },
-  { id: 'index', name: 'Index', color: '#6366f1', tagBg: '#312e81', tagText: '#c7d2fe', baseX: 0.32, baseY: 0.68, orbitSpeed: 0.7, orbitRadius: 34 },
-  { id: 'render', name: 'Render', color: '#f43f5e', tagBg: '#881337', tagText: '#fecdd3', baseX: 0.74, baseY: 0.64, orbitSpeed: 0.9, orbitRadius: 42 },
-  { id: 'palette', name: 'Palette', color: '#14b8a6', tagBg: '#134e4a', tagText: '#99f6e4', baseX: 0.50, baseY: 0.15, orbitSpeed: 0.55, orbitRadius: 40 },
-  { id: 'review', name: 'Review', color: '#eab308', tagBg: '#713f12', tagText: '#fef08a', baseX: 0.50, baseY: 0.85, orbitSpeed: 0.6, orbitRadius: 38 },
+  { id: 'scout', name: 'Scout', color: '#ff4d4d', tagBg: '#7f1d1d', tagText: '#fca5a5', slotIndex: 0, tier: 1 },
+  { id: 'layout', name: 'Layout', color: '#38bdf8', tagBg: '#0369a1', tagText: '#bae6fd', slotIndex: 1, tier: 2 },
+  { id: 'typeset', name: 'Typeset', color: '#34d399', tagBg: '#065f46', tagText: '#a7f3d0', slotIndex: 2, tier: 1 },
+  { id: 'motion', name: 'Motion', color: '#facc15', tagBg: '#854d0e', tagText: '#fef08a', slotIndex: 3, tier: 2 },
+  { id: 'qa', name: 'QA', color: '#f472b6', tagBg: '#9d174d', tagText: '#fbcfe8', slotIndex: 4, tier: 2 },
+  { id: 'deploy', name: 'Deploy', color: '#c084fc', tagBg: '#6b21a8', tagText: '#f3e8ff', slotIndex: 5, tier: 2 },
+  { id: 'copy', name: 'Copy', color: '#22d3ee', tagBg: '#155e75', tagText: '#cffafe', slotIndex: 6, tier: 1 },
+  { id: 'lint', name: 'Lint', color: '#fb923c', tagBg: '#9a3412', tagText: '#ffedd5', slotIndex: 7, tier: 2 },
+  { id: 'index', name: 'Index', color: '#818cf8', tagBg: '#3730a3', tagText: '#e0e7ff', slotIndex: 8, tier: 1 },
+  { id: 'render', name: 'Render', color: '#4ade80', tagBg: '#166534', tagText: '#dcfce7', slotIndex: 9, tier: 2 },
+  { id: 'palette', name: 'Palette', color: '#f87171', tagBg: '#991b1b', tagText: '#fee2e2', slotIndex: 10, tier: 1 },
+  { id: 'review', name: 'Review', color: '#eab308', tagBg: '#713f12', tagText: '#fef08a', slotIndex: 11, tier: 1 },
 ];
 
 interface ActiveWireframe {
@@ -40,7 +38,7 @@ interface CursorState {
   agent: AgentInfo;
   screenX: number; // Viewport-relative X
   screenY: number; // Viewport-relative Y
-  status: 'patrol' | 'gliding' | 'wireframing' | 'building';
+  status: 'resting' | 'gliding' | 'wireframing' | 'building' | 'returning';
   targetEl?: HTMLElement;
   label: string;
 }
@@ -49,12 +47,14 @@ interface RobotSwarmProps {
   isBootComplete: boolean;
   isPaused: boolean;
   isAgentsEnabled: boolean;
+  onCountUpdate?: (built: number, total: number) => void;
 }
 
 export const RobotSwarm: React.FC<RobotSwarmProps> = ({
   isBootComplete,
   isPaused,
   isAgentsEnabled,
+  onCountUpdate,
 }) => {
   const [activeAgents, setActiveAgents] = useState<CursorState[]>([]);
   const [wireframes, setWireframes] = useState<ActiveWireframe[]>([]);
@@ -65,27 +65,51 @@ export const RobotSwarm: React.FC<RobotSwarmProps> = ({
   const wireframesMapRef = useRef<Map<string, ActiveWireframe>>(new Map());
   const rafIdRef = useRef<number | null>(null);
 
-  // Initialize cursors pool: 12 on desktop, 6 on mobile
+  const totalCountRef = useRef(0);
+  const builtCountRef = useRef(0);
+
+  // Compute resting coordinates along the bottom of the screen
+  const getRestCoordinates = useCallback((agent: AgentInfo, winW: number, winH: number) => {
+    const isMobile = winW < 768;
+    const totalSlots = isMobile ? 6 : 12;
+    const idx = isMobile ? agent.slotIndex % 6 : agent.slotIndex;
+
+    // Distribute horizontally across the bottom
+    // Leave room on both margins and skip center area slightly for dock if needed
+    const step = (winW - 80) / (totalSlots - 1 || 1);
+    const baseX = 40 + idx * step;
+
+    // Stagger in two tiers at the very bottom of the screen
+    // Tier 1 is close to the bottom (winH - 42px), Tier 2 is slightly higher (winH - 78px)
+    const baseY = agent.tier === 1 ? winH - 44 : winH - 80;
+
+    return { baseX, baseY };
+  }, []);
+
+  // Initialize cursors pool at the bottom of the screen
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const isMobile = window.innerWidth < 768;
     const count = isMobile ? 6 : 12;
+    const winW = window.innerWidth;
+    const winH = window.innerHeight;
+
     const initialPool: CursorState[] = AGENT_REGISTRY.slice(0, count).map((agent) => {
-      const initX = agent.baseX * window.innerWidth;
-      const initY = agent.baseY * window.innerHeight;
+      const { baseX, baseY } = getRestCoordinates(agent, winW, winH);
       return {
         agent,
-        screenX: initX,
-        screenY: initY,
-        status: 'patrol',
-        label: `${agent.name} // Patrol`,
+        screenX: baseX,
+        screenY: baseY,
+        status: 'resting',
+        label: agent.name,
       };
     });
+
     cursorsRef.current = initialPool;
     setActiveAgents(initialPool);
-  }, []);
+  }, [getRestCoordinates]);
 
-  // Reveal all if agents are disabled
+  // Reveal all if agents disabled
   const instantBuildAll = useCallback(() => {
     const elements = document.querySelectorAll<HTMLElement>('[data-build]');
     elements.forEach((el) => {
@@ -97,7 +121,9 @@ export const RobotSwarm: React.FC<RobotSwarmProps> = ({
     wireframesMapRef.current.clear();
     buildingSetRef.current.clear();
     queueRef.current = [];
-  }, []);
+    builtCountRef.current = elements.length;
+    onCountUpdate?.(elements.length, elements.length);
+  }, [onCountUpdate]);
 
   useEffect(() => {
     if (!isAgentsEnabled) {
@@ -113,6 +139,8 @@ export const RobotSwarm: React.FC<RobotSwarmProps> = ({
     if (!isBootComplete || !isAgentsEnabled) return;
 
     const allElements = Array.from(document.querySelectorAll<HTMLElement>('[data-build]'));
+    totalCountRef.current = allElements.length;
+    onCountUpdate?.(builtCountRef.current, allElements.length);
 
     // Filter elements in reading order
     const sorted = allElements
@@ -125,19 +153,20 @@ export const RobotSwarm: React.FC<RobotSwarmProps> = ({
         return rectA.left - rectB.left;
       });
 
-    // Check for already scrolled past elements and reveal them instantly
+    // Scrolled past elements reveal immediately
     sorted.forEach((el) => {
       const rect = el.getBoundingClientRect();
       if (rect.bottom < 0) {
         el.setAttribute('data-built', 'true');
         el.style.visibility = 'visible';
+        builtCountRef.current++;
       }
     });
 
     const pending = sorted.filter((el) => el.getAttribute('data-built') !== 'true');
     queueRef.current = pending;
+    onCountUpdate?.(builtCountRef.current, totalCountRef.current);
 
-    // IntersectionObserver to add elements into queue when scrolled into view
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -155,9 +184,9 @@ export const RobotSwarm: React.FC<RobotSwarmProps> = ({
     pending.forEach((el) => observer.observe(el));
 
     return () => observer.disconnect();
-  }, [isBootComplete, isAgentsEnabled]);
+  }, [isBootComplete, isAgentsEnabled, onCountUpdate]);
 
-  // Typing helper
+  // Typewriter animation
   const runTypeAnimation = (el: HTMLElement, onDone: () => void) => {
     const originalText = el.getAttribute('data-original-text') || el.innerText || '';
     if (!el.hasAttribute('data-original-text')) {
@@ -168,7 +197,7 @@ export const RobotSwarm: React.FC<RobotSwarmProps> = ({
     el.classList.add('typing-caret');
 
     let idx = 0;
-    const speed = originalText.length > 80 ? 12 : 25;
+    const speed = originalText.length > 80 ? 10 : 20;
     const timer = setInterval(() => {
       if (isPaused) return;
       if (idx < originalText.length) {
@@ -195,103 +224,120 @@ export const RobotSwarm: React.FC<RobotSwarmProps> = ({
         const winW = window.innerWidth;
         const winH = window.innerHeight;
 
-        // 1. Assign queue items to available patrolling cursors (Max 6 concurrent builds)
+        // 1. Assign queue items to available resting cursors (Max 4 concurrent builds to avoid clutter)
         const currentBuildingCount = buildingSetRef.current.size;
-        const maxConcurrent = 6;
+        const maxConcurrent = 4;
 
         if (currentBuildingCount < maxConcurrent && queueRef.current.length > 0) {
-          const availableCursor = cursorsRef.current.find((c) => c.status === 'patrol');
+          const availableCursor = cursorsRef.current.find((c) => c.status === 'resting');
           if (availableCursor) {
             const nextEl = queueRef.current.shift();
             if (nextEl && !buildingSetRef.current.has(nextEl)) {
               buildingSetRef.current.add(nextEl);
               availableCursor.status = 'gliding';
               availableCursor.targetEl = nextEl;
-              availableCursor.label = `${availableCursor.agent.name} // Approaching`;
+              availableCursor.label = `${availableCursor.agent.name}`;
             }
           }
         }
 
         // 2. Update each cursor
         cursorsRef.current.forEach((c) => {
-          if (c.status === 'patrol' || !c.targetEl) {
-            // PATROL MODE: Hover naturally in its assigned screen sector
-            const orbitX = Math.cos(time * c.agent.orbitSpeed + c.agent.baseX * 10) * c.agent.orbitRadius;
-            const orbitY = Math.sin(time * c.agent.orbitSpeed + c.agent.baseY * 10) * c.agent.orbitRadius;
+          const { baseX, baseY } = getRestCoordinates(c.agent, winW, winH);
 
-            const targetScreenX = Math.max(30, Math.min(winW - 160, c.agent.baseX * winW + orbitX));
-            const targetScreenY = Math.max(70, Math.min(winH - 80, c.agent.baseY * winH + orbitY));
+          // STATUS: RESTING (Stay at bottom of the screen with subtle bobbing)
+          if (c.status === 'resting') {
+            const bobY = Math.sin(time * 2 + c.agent.slotIndex * 0.8) * 3;
+            const bobX = Math.cos(time * 1.5 + c.agent.slotIndex * 0.8) * 2;
 
-            // Smooth ease
-            c.screenX += (targetScreenX - c.screenX) * 0.08;
-            c.screenY += (targetScreenY - c.screenY) * 0.08;
-            c.label = `${c.agent.name} // Patrolling`;
+            const targetX = baseX + bobX;
+            const targetY = baseY + bobY;
+
+            c.screenX += (targetX - c.screenX) * 0.15;
+            c.screenY += (targetY - c.screenY) * 0.15;
+            c.label = c.agent.name;
             return;
           }
 
-          // GLIDING or BUILDING target element
-          const rect = c.targetEl.getBoundingClientRect();
+          // STATUS: RETURNING (Gliding back down to bottom resting position)
+          if (c.status === 'returning') {
+            const dx = baseX - c.screenX;
+            const dy = baseY - c.screenY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
 
-          // Target is in viewport coordinates
-          const targetScreenX = rect.left + Math.min(rect.width * 0.1, 40);
-          const targetScreenY = rect.top + Math.min(rect.height * 0.1, 30);
+            c.screenX += dx * 0.16;
+            c.screenY += dy * 0.16;
 
-          const dx = targetScreenX - c.screenX;
-          const dy = targetScreenY - c.screenY;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 15) {
+              c.status = 'resting';
+              c.label = c.agent.name;
+            }
+            return;
+          }
 
-          c.screenX += dx * 0.22;
-          c.screenY += dy * 0.22;
+          // STATUS: GLIDING OR BUILDING (Working on target element)
+          if (c.targetEl) {
+            const rect = c.targetEl.getBoundingClientRect();
 
-          if (c.status === 'gliding' && dist < 35) {
-            // Reached element -> Start Wireframing
-            c.status = 'wireframing';
-            c.label = `${c.agent.name} // Wireframing`;
-            const buildType = c.targetEl.getAttribute('data-build') || 'pop';
+            // Destination at top-left edge of the element
+            const targetX = rect.left + Math.min(rect.width * 0.08, 30);
+            const targetY = rect.top + Math.min(rect.height * 0.12, 20);
 
-            const wire: ActiveWireframe = {
-              id: `wire-${c.agent.id}`,
-              agent: c.agent,
-              rect: {
-                left: rect.left,
-                top: rect.top,
-                width: Math.max(rect.width, 24),
-                height: Math.max(rect.height, 24),
-              },
-              label: `${c.agent.name} // [${buildType.toUpperCase()}]`,
-            };
-            wireframesMapRef.current.set(c.agent.id, wire);
+            const dx = targetX - c.screenX;
+            const dy = targetY - c.screenY;
+            const dist = Math.sqrt(dx * dx + dy * dy);
 
-            // Drag out wireframe and reveal
-            setTimeout(() => {
-              if (c.targetEl) {
-                c.status = 'building';
-                c.label = `${c.agent.name} // Constructing`;
-                c.targetEl.setAttribute('data-building', 'true');
-                c.targetEl.style.visibility = 'visible';
+            c.screenX += dx * 0.22;
+            c.screenY += dy * 0.22;
 
-                if (buildType === 'type') {
-                  runTypeAnimation(c.targetEl, () => {
-                    completeBuild(c);
-                  });
-                } else {
-                  setTimeout(() => {
-                    completeBuild(c);
-                  }, 480);
-                }
-              }
-            }, 220);
-          } else if (c.status === 'building' || c.status === 'wireframing') {
-            // Keep wireframe tracking element dynamically if user scrolls
-            const wire = wireframesMapRef.current.get(c.agent.id);
-            if (wire && c.targetEl) {
-              const liveRect = c.targetEl.getBoundingClientRect();
-              wire.rect = {
-                left: liveRect.left,
-                top: liveRect.top,
-                width: Math.max(liveRect.width, 24),
-                height: Math.max(liveRect.height, 24),
+            if (c.status === 'gliding' && dist < 30) {
+              // Reached element -> Start Wireframing
+              c.status = 'wireframing';
+              const buildType = c.targetEl.getAttribute('data-build') || 'pop';
+
+              const wire: ActiveWireframe = {
+                id: `wire-${c.agent.id}`,
+                agent: c.agent,
+                rect: {
+                  left: rect.left,
+                  top: rect.top,
+                  width: Math.max(rect.width, 24),
+                  height: Math.max(rect.height, 24),
+                },
+                label: `${c.agent.name} // [${buildType.toUpperCase()}]`,
               };
+              wireframesMapRef.current.set(c.agent.id, wire);
+
+              // Unveil and build
+              setTimeout(() => {
+                if (c.targetEl) {
+                  c.status = 'building';
+                  c.targetEl.setAttribute('data-building', 'true');
+                  c.targetEl.style.visibility = 'visible';
+
+                  if (buildType === 'type') {
+                    runTypeAnimation(c.targetEl, () => {
+                      finishAndReturn(c);
+                    });
+                  } else {
+                    setTimeout(() => {
+                      finishAndReturn(c);
+                    }, 450);
+                  }
+                }
+              }, 200);
+            } else if (c.status === 'building' || c.status === 'wireframing') {
+              // Keep wireframe tracking element dynamically if user scrolls
+              const wire = wireframesMapRef.current.get(c.agent.id);
+              if (wire && c.targetEl) {
+                const liveRect = c.targetEl.getBoundingClientRect();
+                wire.rect = {
+                  left: liveRect.left,
+                  top: liveRect.top,
+                  width: Math.max(liveRect.width, 24),
+                  height: Math.max(liveRect.height, 24),
+                };
+              }
             }
           }
         });
@@ -304,18 +350,20 @@ export const RobotSwarm: React.FC<RobotSwarmProps> = ({
       rafIdRef.current = requestAnimationFrame(loop);
     };
 
-    const completeBuild = (c: CursorState) => {
+    const finishAndReturn = (c: CursorState) => {
       if (c.targetEl) {
         c.targetEl.setAttribute('data-built', 'true');
         c.targetEl.removeAttribute('data-building');
         c.targetEl.style.visibility = 'visible';
         buildingSetRef.current.delete(c.targetEl);
+        builtCountRef.current++;
+        onCountUpdate?.(builtCountRef.current, totalCountRef.current);
       }
       wireframesMapRef.current.delete(c.agent.id);
-      // Return to active patrol mode instead of disappearing
-      c.status = 'patrol';
+      // Glides smoothly back down to bottom dock instead of hovering over content
+      c.status = 'returning';
       c.targetEl = undefined;
-      c.label = `${c.agent.name} // Active`;
+      c.label = c.agent.name;
     };
 
     rafIdRef.current = requestAnimationFrame(loop);
@@ -323,7 +371,7 @@ export const RobotSwarm: React.FC<RobotSwarmProps> = ({
     return () => {
       if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
     };
-  }, [isBootComplete, isAgentsEnabled, isPaused]);
+  }, [isBootComplete, isAgentsEnabled, isPaused, getRestCoordinates, onCountUpdate]);
 
   if (!isAgentsEnabled) return null;
 
@@ -341,7 +389,7 @@ export const RobotSwarm: React.FC<RobotSwarmProps> = ({
             height: `${w.rect.height}px`,
             border: `1.5px dashed ${w.agent.color}`,
             backgroundColor: `${w.agent.color}15`,
-            boxShadow: `0 0 18px ${w.agent.color}45`,
+            boxShadow: `0 0 16px ${w.agent.color}40`,
           }}
         >
           {/* 4 Corner resize handles */}
@@ -368,7 +416,7 @@ export const RobotSwarm: React.FC<RobotSwarmProps> = ({
             style={{
               backgroundColor: w.agent.tagBg,
               color: w.agent.tagText,
-              border: `1px solid ${w.agent.color}60`,
+              border: `1px solid ${w.agent.color}70`,
             }}
           >
             {w.label}
@@ -376,7 +424,7 @@ export const RobotSwarm: React.FC<RobotSwarmProps> = ({
         </div>
       ))}
 
-      {/* 2. Robot Cursors — ALWAYS VISIBLE AS YOU SCROLL DOWN */}
+      {/* 2. Robot Cursors — ASSEMBLED AT THE BOTTOM OF THE SCREEN */}
       {activeAgents.map((c) => (
         <div
           key={c.agent.id}
@@ -386,12 +434,12 @@ export const RobotSwarm: React.FC<RobotSwarmProps> = ({
             willChange: 'transform',
           }}
         >
-          {/* Cursor SVG Arrow Pointer */}
+          {/* Cursor SVG Arrow Pointer pointing upwards into the page */}
           <svg
-            className="w-5 h-5 drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]"
+            className="w-4 h-4 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] transform -rotate-45"
             viewBox="0 0 24 24"
             fill={c.agent.color}
-            stroke="#ffffff"
+            stroke="#09090b"
             strokeWidth="1.5"
           >
             <path d="M3 3l7 18 3-7 7-3L3 3z" />
@@ -399,16 +447,16 @@ export const RobotSwarm: React.FC<RobotSwarmProps> = ({
 
           {/* Pill Name Tag with Robot Head */}
           <div
-            className="absolute left-4 top-2 flex items-center gap-1.5 px-2 py-1 rounded-full border shadow-xl backdrop-blur-sm whitespace-nowrap"
+            className="absolute left-3.5 top-0 flex items-center gap-1.5 px-2 py-0.5 rounded-full border shadow-xl backdrop-blur-sm whitespace-nowrap"
             style={{
               backgroundColor: `${c.agent.tagBg}f0`,
-              borderColor: `${c.agent.color}90`,
+              borderColor: `${c.agent.color}95`,
               color: c.agent.tagText,
             }}
           >
             {/* Robot Face Box */}
             <div
-              className="relative w-3.5 h-3.5 rounded-[3px] border flex items-center justify-center p-0.5"
+              className="relative w-3 h-3 rounded-[2.5px] border flex items-center justify-center p-0.5"
               style={{
                 backgroundColor: '#09090b',
                 borderColor: c.agent.color,
@@ -416,25 +464,25 @@ export const RobotSwarm: React.FC<RobotSwarmProps> = ({
             >
               {/* Antenna with pulsing tip */}
               <span
-                className="robot-antenna-tip absolute -top-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full"
+                className="robot-antenna-tip absolute -top-1 left-1/2 -translate-x-1/2 w-0.5 h-0.5 rounded-full"
                 style={{ backgroundColor: c.agent.color, color: c.agent.color }}
               />
 
               {/* Blinking LED eyes */}
               <div className="flex gap-0.5 items-center justify-center">
                 <span
-                  className="robot-eye w-0.5 h-1 rounded-full"
+                  className="robot-eye w-0.5 h-0.5 rounded-full"
                   style={{ backgroundColor: c.agent.color }}
                 />
                 <span
-                  className="robot-eye w-0.5 h-1 rounded-full"
+                  className="robot-eye w-0.5 h-0.5 rounded-full"
                   style={{ backgroundColor: c.agent.color }}
                 />
               </div>
             </div>
 
-            {/* Agent Name & Status */}
-            <span className="font-mono text-[10px] font-bold tracking-wide">
+            {/* Agent Name */}
+            <span className="font-mono text-[10px] font-bold tracking-wider uppercase">
               {c.label}
             </span>
           </div>

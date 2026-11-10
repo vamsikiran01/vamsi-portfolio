@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Mail, Linkedin, Github, Copy, Check, ArrowUpRight, Send } from 'lucide-react';
+import { Mail, Linkedin, Github, Copy, Check, ArrowUpRight } from 'lucide-react';
 
 export const ContactSection: React.FC = () => {
   const [copied, setCopied] = useState(false);
@@ -21,129 +21,86 @@ export const ContactSection: React.FC = () => {
       aria-label="Contact Aradhyula Vamsi Kiran"
       className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-zinc-800/80 relative z-10"
     >
-      <div className="mb-14">
-        <div
-          data-build="type"
-          className="text-xs font-mono text-[#ff3b2f] tracking-widest uppercase mb-2 flex items-center gap-2"
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-[#ff3b2f]" />
-          <span>05 // INITIATE TRANSMISSION</span>
-        </div>
-        <h2
-          data-build="wipe"
-          className="font-anton text-4xl sm:text-6xl text-white uppercase tracking-tight"
-        >
-          Let&apos;s Connect
-        </h2>
-      </div>
-
       {/* Big Call-to-Action Card */}
       <div
         data-build="pop"
-        className="p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-zinc-950 via-[#0d0909] to-zinc-950 border border-zinc-800/90 shadow-2xl relative overflow-hidden mb-16"
+        className="p-8 sm:p-12 rounded-3xl bg-zinc-950/90 border border-zinc-800/90 shadow-2xl relative overflow-hidden mb-16"
       >
         <div
           aria-hidden="true"
           className="absolute -top-32 -right-32 w-80 h-80 rounded-full bg-[#ff3b2f]/10 blur-3xl pointer-events-none"
         />
 
-        <div className="max-w-2xl relative z-10 space-y-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/60 border border-emerald-800/50 text-emerald-400 font-mono text-xs">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>Available to join immediately</span>
+        <div className="max-w-3xl relative z-10 space-y-5">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-950/50 border border-red-800/40 text-[#ff3b2f] font-mono text-[11px] font-semibold tracking-wider uppercase">
+            <span>AVAILABLE TO JOIN IMMEDIATELY</span>
           </div>
 
-          <h3 className="font-anton text-3xl sm:text-5xl text-white uppercase tracking-tight leading-tight">
-            Ready to build reliable software &amp; autonomous AI workflows.
+          <h3 className="font-anton text-3xl sm:text-5xl lg:text-6xl text-white uppercase tracking-tight leading-[1.05]">
+            Ready to build agentic AI &amp; full-stack systems.
           </h3>
 
           <p className="text-zinc-300 text-sm sm:text-base font-sans leading-relaxed">
-            Whether you are looking for an AI/ML engineer skilled in Gemini Flash API integrations, advanced prompt engineering, or full-stack Django development—reach out directly.
+            Looking for an AI/ML Graduate, Prompt Engineer, or Python &amp; Django developer? Reach out directly via email or LinkedIn.
           </p>
 
-          {/* Action Row */}
-          <div className="flex flex-wrap items-center gap-4 pt-2 relative z-20">
-            {/* Mailto link button */}
+          {/* Action Row matching frame 07 */}
+          <div className="flex flex-wrap items-center gap-3.5 pt-3 relative z-20">
+            {/* Primary Email Button */}
             <a
               href={`mailto:${email}`}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#ff3b2f] hover:bg-[#e03025] text-white font-mono text-xs uppercase font-semibold tracking-wider transition-all duration-150 shadow-[0_0_20px_rgba(255,59,47,0.35)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white cursor-pointer"
-            >
-              <Send className="w-4 h-4" />
-              <span>Send Email</span>
-            </a>
-
-            {/* Copy button */}
-            <button
               onClick={copyEmail}
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700 font-mono text-xs tracking-wider transition-all duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff3b2f] cursor-pointer"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#ff3b2f] hover:bg-[#e03025] text-white font-mono text-xs uppercase font-bold tracking-wider transition-all duration-150 shadow-[0_0_20px_rgba(255,59,47,0.35)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white cursor-pointer"
             >
               {copied ? (
                 <>
-                  <Check className="w-4 h-4 text-emerald-400" />
-                  <span className="text-emerald-400">Copied!</span>
+                  <Check className="w-4 h-4 text-white" />
+                  <span>COPIED TO CLIPBOARD</span>
                 </>
               ) : (
                 <>
-                  <Copy className="w-4 h-4" />
-                  <span>{email}</span>
+                  <Mail className="w-4 h-4 text-white" />
+                  <span>{email.toUpperCase()}</span>
                 </>
               )}
-            </button>
+            </a>
+
+            {/* LinkedIn Profile Button */}
+            <a
+              href={linkedinUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-zinc-700 font-mono text-xs uppercase font-semibold tracking-wider transition-all duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff3b2f] cursor-pointer"
+            >
+              <Linkedin className="w-4 h-4 text-[#ff3b2f]" />
+              <span>LINKEDIN PROFILE</span>
+              <ArrowUpRight className="w-3.5 h-3.5 text-zinc-400" />
+            </a>
+
+            {/* GitHub Profile Button */}
+            <a
+              href={githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-zinc-700 font-mono text-xs uppercase font-semibold tracking-wider transition-all duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff3b2f] cursor-pointer"
+            >
+              <Github className="w-4 h-4 text-zinc-300" />
+              <span>GITHUB PROFILE</span>
+              <ArrowUpRight className="w-3.5 h-3.5 text-zinc-400" />
+            </a>
           </div>
         </div>
       </div>
 
-      {/* Social Links Row with Verified Working URLs */}
-      <div
-        data-build="pop"
-        className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl mb-20 relative z-30"
-      >
-        {/* LinkedIn Button */}
-        <a
-          href={linkedinUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-between p-4 rounded-xl bg-zinc-950 border border-zinc-800 hover:border-[#ff3b2f]/60 hover:bg-zinc-900/80 transition-all group cursor-pointer shadow-sm active:scale-[0.98]"
-        >
-          <div className="flex items-center gap-3">
-            <Linkedin className="w-5 h-5 text-zinc-400 group-hover:text-[#ff3b2f] transition-colors" />
-            <div>
-              <div className="text-sm font-semibold text-white group-hover:text-[#ff3b2f] transition-colors">LinkedIn</div>
-              <div className="text-xs font-mono text-zinc-400">aradhyula-vamsi-kiran</div>
-            </div>
-          </div>
-          <ArrowUpRight className="w-4 h-4 text-zinc-400 group-hover:text-white transition-colors" />
-        </a>
-
-        {/* GitHub Button */}
-        <a
-          href={githubUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center justify-between p-4 rounded-xl bg-zinc-950 border border-zinc-800 hover:border-[#ff3b2f]/60 hover:bg-zinc-900/80 transition-all group cursor-pointer shadow-sm active:scale-[0.98]"
-        >
-          <div className="flex items-center gap-3">
-            <Github className="w-5 h-5 text-zinc-400 group-hover:text-[#ff3b2f] transition-colors" />
-            <div>
-              <div className="text-sm font-semibold text-white group-hover:text-[#ff3b2f] transition-colors">GitHub</div>
-              <div className="text-xs font-mono text-zinc-400">vamsikiran01</div>
-            </div>
-          </div>
-          <ArrowUpRight className="w-4 h-4 text-zinc-400 group-hover:text-white transition-colors" />
-        </a>
-      </div>
-
-      {/* Footer strictly with NO phone number */}
-      <footer className="border-t border-zinc-900 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-zinc-400">
+      {/* Footer strictly with NO phone number matching frame 07 */}
+      <footer className="border-t border-zinc-900 pt-8 pb-16 flex flex-col sm:flex-row items-center justify-between gap-4 font-mono text-xs text-zinc-400">
         <div>
-          &copy; {new Date().getFullYear()} ARADHYULA VAMSI KIRAN. All rights reserved.
+          &copy; {new Date().getFullYear()} ARADHYULA VAMSI KIRAN. Built strictly from verified resume facts.
         </div>
-        <div className="flex items-center gap-3">
-          <span>NEXT.JS 15</span>
+        <div className="flex items-center gap-2 text-zinc-400 text-[11px]">
+          <span>Based in Visakhapatnam, AP</span>
           <span>•</span>
-          <span>TAILWIND CSS</span>
-          <span>•</span>
-          <span className="text-[#ff3b2f]">ROBOT SWARM ENGINE</span>
+          <span>B.Tech AIML (2022-2026)</span>
         </div>
       </footer>
     </section>

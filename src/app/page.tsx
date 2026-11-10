@@ -17,11 +17,11 @@ export default function Home() {
   const [isPaused, setIsPaused] = useState(false);
   const [isAgentsEnabled, setIsAgentsEnabled] = useState(true);
   const [isTouring, setIsTouring] = useState(false);
+  const [builtCount, setBuiltCount] = useState(0);
+  const [totalCount, setTotalCount] = useState(68);
 
   const tourRafIdRef = useRef<number | null>(null);
   const tourStartTimeRef = useRef<number | null>(null);
-  const tourStartScrollRef = useRef<number>(0);
-  const tourTotalDistanceRef = useRef<number>(0);
 
   // Initialize agents state from URL params or localStorage
   useEffect(() => {
@@ -93,14 +93,11 @@ export default function Home() {
       // Custom smooth easing: ease-in, linear steady, ease-out
       let eased: number;
       if (progress < 0.1) {
-        // Ease in
         eased = 0.5 * Math.pow(progress / 0.1, 2) * 0.1;
       } else if (progress > 0.9) {
-        // Ease out
         const p = (progress - 0.9) / 0.1;
         eased = 0.9 + (1 - Math.pow(1 - p, 2)) * 0.1;
       } else {
-        // Linear steady reading speed
         eased = progress;
       }
 
@@ -134,7 +131,7 @@ export default function Home() {
   useEffect(() => {
     if (!isTouring) return;
 
-    const stopOnUserAction = (e: Event) => {
+    const stopOnUserAction = () => {
       handleStopTour();
     };
 
@@ -159,13 +156,17 @@ export default function Home() {
         isBootComplete={bootComplete}
         isPaused={isPaused}
         isAgentsEnabled={isAgentsEnabled}
+        onCountUpdate={(b, t) => {
+          setBuiltCount(b);
+          setTotalCount(t);
+        }}
       />
 
       {/* 3. Top Navigation Bar */}
       <Navbar />
 
-      {/* 4. Hero Section */}
-      <main>
+      {/* 4. Main Page Sections */}
+      <main className="relative z-10">
         <Hero />
         <WorkSection />
         <StackSection />
@@ -183,6 +184,8 @@ export default function Home() {
         isTouring={isTouring}
         onStartTour={handleStartTour}
         onStopTour={handleStopTour}
+        builtCount={builtCount}
+        totalCount={totalCount}
       />
     </div>
   );
