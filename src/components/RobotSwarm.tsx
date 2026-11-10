@@ -75,12 +75,10 @@ export const RobotSwarm: React.FC<RobotSwarmProps> = ({
     const idx = isMobile ? agent.slotIndex % 6 : agent.slotIndex;
 
     // Distribute horizontally across the bottom
-    // Leave room on both margins and skip center area slightly for dock if needed
-    const step = (winW - 80) / (totalSlots - 1 || 1);
-    const baseX = 40 + idx * step;
+    const step = (winW - 60) / (totalSlots - 1 || 1);
+    const baseX = 30 + idx * step;
 
-    // Stagger in two tiers at the very bottom of the screen
-    // Tier 1 is close to the bottom (winH - 42px), Tier 2 is slightly higher (winH - 78px)
+    // Tier 1: winH - 42px, Tier 2: winH - 78px
     const baseY = agent.tier === 1 ? winH - 44 : winH - 80;
 
     return { baseX, baseY };
@@ -109,7 +107,7 @@ export const RobotSwarm: React.FC<RobotSwarmProps> = ({
     setActiveAgents(initialPool);
   }, [getRestCoordinates]);
 
-  // Reveal all if agents disabled
+  // Instant build helper if agents disabled
   const instantBuildAll = useCallback(() => {
     const elements = document.querySelectorAll<HTMLElement>('[data-build]');
     elements.forEach((el) => {
@@ -134,57 +132,72 @@ export const RobotSwarm: React.FC<RobotSwarmProps> = ({
     }
   }, [isAgentsEnabled, instantBuildAll]);
 
-  // Main Element Collector & Intersection Observer
-  useEffect(() => {
-    if (!isBootComplete || !isAgentsEnabled) return;
+  // Scan only elements currently visible in viewport to add to queue on scroll
+  const checkViewportElements = useCallback(() => {
+    if (!isBootComplete || !isAgentsEnabled || isPaused || typeof window === 'undefined') return;
 
+    const winH = window.innerHeight;
     const allElements = Array.from(document.querySelectorAll<HTMLElement>('[data-build]'));
     totalCountRef.current = allElements.length;
-    onCountUpdate?.(builtCountRef.current, allElements.length);
 
-    // Filter elements in reading order
-    const sorted = allElements
-      .filter((el) => el.getAttribute('data-built') !== 'true')
-      .sort((a, b) => {
-        const rectA = a.getBoundingClientRect();
-        const rectB = b.getBoundingClientRect();
-        const topDiff = (window.scrollY + rectA.top) - (window.scrollY + rectB.top);
-        if (Math.abs(topDiff) > 20) return topDiff;
-        return rectA.left - rectB.left;
-      });
+    allElements.forEach((el) => {
+      // Already built or currently building
+      if (el.getAttribute('data-built') === 'true' || buildingSetRef.current.has(el)) {
+        return;
+      }
 
-    // Scrolled past elements reveal immediately
-    sorted.forEach((el) => {
       const rect = el.getBoundingClientRect();
-      if (rect.bottom < 0) {
+
+      // Scrolled past above top of screen: reveal immediately so user can read if scrolled past
+      if (rect.bottom < -10) {
         el.setAttribute('data-built', 'true');
+        el.removeAttribute('data-building');
         el.style.visibility = 'visible';
         builtCountRef.current++;
+        onCountUpdate?.(builtCountRef.current, totalCountRef.current);
+        return;
+      }
+
+      // ONLY queue elements that have actually entered the user's viewport!
+      // (rect.top <= winH * 0.90 means it's visible in the bottom 90% of screen)
+      if (rect.top <= winH * 0.90 && rect.bottom >= 0) {
+        if (!queueRef.current.includes(el)) {
+          queueRef.current.push(el);
+        }
       }
     });
 
-    const pending = sorted.filter((el) => el.getAttribute('data-built') !== 'true');
-    queueRef.current = pending;
+    // Sort queue by reading order
+    queueRef.current.sort((a, b) => {
+      const rectA = a.getBoundingClientRect();
+      const rectB = b.getBoundingClientRect();
+      const topDiff = rectA.top - rectB.top;
+      if (Math.abs(topDiff) > 20) return topDiff;
+      return rectA.left - rectB.left;
+    });
+
     onCountUpdate?.(builtCountRef.current, totalCountRef.current);
+  }, [isBootComplete, isAgentsEnabled, isPaused, onCountUpdate]);
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const el = entry.target as HTMLElement;
-          if (entry.isIntersecting && el.getAttribute('data-built') !== 'true') {
-            if (!queueRef.current.includes(el) && !buildingSetRef.current.has(el)) {
-              queueRef.current.push(el);
-            }
-          }
-        });
-      },
-      { rootMargin: '120px 0px 120px 0px', threshold: 0.05 }
-    );
+  // Run viewport check on initial boot and on scroll
+  useEffect(() => {
+    if (!isBootComplete || !isAgentsEnabled) return;
 
-    pending.forEach((el) => observer.observe(el));
+    // Check once immediately for hero elements in viewport
+    checkViewportElements();
 
-    return () => observer.disconnect();
-  }, [isBootComplete, isAgentsEnabled, onCountUpdate]);
+    const handleScroll = () => {
+      checkViewportElements();
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, [isBootComplete, isAgentsEnabled, checkViewportElements]);
 
   // Typewriter animation
   const runTypeAnimation = (el: HTMLElement, onDone: () => void) => {
@@ -197,7 +210,7 @@ export const RobotSwarm: React.FC<RobotSwarmProps> = ({
     el.classList.add('typing-caret');
 
     let idx = 0;
-    const speed = originalText.length > 80 ? 10 : 20;
+    const speed = originalText.length > 80 ? 8 : 16;
     const timer = setInterval(() => {
       if (isPaused) return;
       if (idx < originalText.length) {
@@ -211,20 +224,27 @@ export const RobotSwarm: React.FC<RobotSwarmProps> = ({
     }, speed);
   };
 
-  // Main Loop
+  // Main Loop: assigns queued on-screen elements to resting cursors
   useEffect(() => {
     if (!isBootComplete || !isAgentsEnabled) return;
 
     let startTime = performance.now();
+    let lastScanTime = 0;
 
     const loop = (now: number) => {
       const time = (now - startTime) / 1000;
+
+      // Periodically scan viewport every 250ms in case scroll events missed
+      if (now - lastScanTime > 250) {
+        lastScanTime = now;
+        checkViewportElements();
+      }
 
       if (!isPaused && typeof window !== 'undefined') {
         const winW = window.innerWidth;
         const winH = window.innerHeight;
 
-        // 1. Assign queue items to available resting cursors (Max 4 concurrent builds to avoid clutter)
+        // 1. Assign queue items to available resting cursors
         const currentBuildingCount = buildingSetRef.current.size;
         const maxConcurrent = 4;
 
@@ -241,11 +261,11 @@ export const RobotSwarm: React.FC<RobotSwarmProps> = ({
           }
         }
 
-        // 2. Update each cursor
+        // 2. Update each cursor position
         cursorsRef.current.forEach((c) => {
           const { baseX, baseY } = getRestCoordinates(c.agent, winW, winH);
 
-          // STATUS: RESTING (Stay at bottom of the screen with subtle bobbing)
+          // STATUS: RESTING (Stays at bottom of screen, following scroll with gentle bobbing)
           if (c.status === 'resting') {
             const bobY = Math.sin(time * 2 + c.agent.slotIndex * 0.8) * 3;
             const bobX = Math.cos(time * 1.5 + c.agent.slotIndex * 0.8) * 2;
@@ -253,20 +273,20 @@ export const RobotSwarm: React.FC<RobotSwarmProps> = ({
             const targetX = baseX + bobX;
             const targetY = baseY + bobY;
 
-            c.screenX += (targetX - c.screenX) * 0.15;
-            c.screenY += (targetY - c.screenY) * 0.15;
+            c.screenX += (targetX - c.screenX) * 0.16;
+            c.screenY += (targetY - c.screenY) * 0.16;
             c.label = c.agent.name;
             return;
           }
 
-          // STATUS: RETURNING (Gliding back down to bottom resting position)
+          // STATUS: RETURNING (Glides smoothly back down to bottom dock)
           if (c.status === 'returning') {
             const dx = baseX - c.screenX;
             const dy = baseY - c.screenY;
             const dist = Math.sqrt(dx * dx + dy * dy);
 
-            c.screenX += dx * 0.16;
-            c.screenY += dy * 0.16;
+            c.screenX += dx * 0.20;
+            c.screenY += dy * 0.20;
 
             if (dist < 15) {
               c.status = 'resting';
@@ -279,7 +299,7 @@ export const RobotSwarm: React.FC<RobotSwarmProps> = ({
           if (c.targetEl) {
             const rect = c.targetEl.getBoundingClientRect();
 
-            // Destination at top-left edge of the element
+            // Destination at top-left corner of the element
             const targetX = rect.left + Math.min(rect.width * 0.08, 30);
             const targetY = rect.top + Math.min(rect.height * 0.12, 20);
 
@@ -287,8 +307,8 @@ export const RobotSwarm: React.FC<RobotSwarmProps> = ({
             const dy = targetY - c.screenY;
             const dist = Math.sqrt(dx * dx + dy * dy);
 
-            c.screenX += dx * 0.22;
-            c.screenY += dy * 0.22;
+            c.screenX += dx * 0.25;
+            c.screenY += dy * 0.25;
 
             if (c.status === 'gliding' && dist < 30) {
               // Reached element -> Start Wireframing
@@ -308,7 +328,7 @@ export const RobotSwarm: React.FC<RobotSwarmProps> = ({
               };
               wireframesMapRef.current.set(c.agent.id, wire);
 
-              // Unveil and build
+              // Reveal element and begin animation
               setTimeout(() => {
                 if (c.targetEl) {
                   c.status = 'building';
@@ -322,12 +342,12 @@ export const RobotSwarm: React.FC<RobotSwarmProps> = ({
                   } else {
                     setTimeout(() => {
                       finishAndReturn(c);
-                    }, 450);
+                    }, 400);
                   }
                 }
-              }, 200);
+              }, 180);
             } else if (c.status === 'building' || c.status === 'wireframing') {
-              // Keep wireframe tracking element dynamically if user scrolls
+              // Dynamically keep wireframe tracking element position during scroll
               const wire = wireframesMapRef.current.get(c.agent.id);
               if (wire && c.targetEl) {
                 const liveRect = c.targetEl.getBoundingClientRect();
@@ -360,7 +380,7 @@ export const RobotSwarm: React.FC<RobotSwarmProps> = ({
         onCountUpdate?.(builtCountRef.current, totalCountRef.current);
       }
       wireframesMapRef.current.delete(c.agent.id);
-      // Glides smoothly back down to bottom dock instead of hovering over content
+      // Immediately glides back down to its slot at the bottom
       c.status = 'returning';
       c.targetEl = undefined;
       c.label = c.agent.name;
@@ -371,7 +391,7 @@ export const RobotSwarm: React.FC<RobotSwarmProps> = ({
     return () => {
       if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current);
     };
-  }, [isBootComplete, isAgentsEnabled, isPaused, getRestCoordinates, onCountUpdate]);
+  }, [isBootComplete, isAgentsEnabled, isPaused, getRestCoordinates, onCountUpdate, checkViewportElements]);
 
   if (!isAgentsEnabled) return null;
 
@@ -424,7 +444,7 @@ export const RobotSwarm: React.FC<RobotSwarmProps> = ({
         </div>
       ))}
 
-      {/* 2. Robot Cursors — ASSEMBLED AT THE BOTTOM OF THE SCREEN */}
+      {/* 2. Robot Cursors — TRAVEL WITH SCROLL AT BOTTOM OF THE SCREEN */}
       {activeAgents.map((c) => (
         <div
           key={c.agent.id}
