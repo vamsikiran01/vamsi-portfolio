@@ -2,11 +2,14 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { ArrowUpRight, FileDown } from 'lucide-react';
+import { FileDown, Github, Linkedin } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
+  const linkedinUrl = 'https://www.linkedin.com/in/aradhyula-vamsi-kiran-016a9229a/';
+  const githubUrl = 'https://github.com/vamsikiran01';
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-[#09090b]/85 border-b border-zinc-800/80 backdrop-blur-md">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-[#09090b]/90 border-b border-zinc-800/80 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand Name / Logo */}
         <Link
@@ -56,10 +59,32 @@ export const Navbar: React.FC = () => {
           </a>
         </nav>
 
-        {/* Right CTA Badge & Resume */}
-        <div className="flex items-center gap-3">
+        {/* Right CTA Badge, Socials & Resume */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          {/* Direct LinkedIn Link */}
+          <a
+            href={linkedinUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="LinkedIn Profile"
+            className="p-2 rounded-md bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-[#ff3b2f] border border-zinc-800 transition-colors cursor-pointer"
+          >
+            <Linkedin className="w-4 h-4" />
+          </a>
+
+          {/* Direct GitHub Link */}
+          <a
+            href={githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="GitHub Profile"
+            className="p-2 rounded-md bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-white border border-zinc-800 transition-colors cursor-pointer"
+          >
+            <Github className="w-4 h-4" />
+          </a>
+
           {/* Status Beacon from resume */}
-          <div className="hidden sm:flex items-center gap-2 px-2.5 py-1 rounded-full border border-zinc-800 bg-zinc-900/80 font-mono text-[11px] text-zinc-300">
+          <div className="hidden lg:flex items-center gap-2 px-2.5 py-1 rounded-full border border-zinc-800 bg-zinc-900/80 font-mono text-[11px] text-zinc-300">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
             <span>Available Immediately</span>
           </div>
@@ -71,7 +96,7 @@ export const Navbar: React.FC = () => {
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-zinc-900 hover:bg-zinc-800 text-zinc-200 hover:text-white border border-zinc-700 text-xs font-mono transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff3b2f]"
           >
             <FileDown className="w-3.5 h-3.5 text-[#ff3b2f]" />
-            <span className="hidden sm:inline">Resume PDF</span>
+            <span className="hidden sm:inline">Resume</span>
           </a>
         </div>
       </div>

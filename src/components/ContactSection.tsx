@@ -6,6 +6,8 @@ import { Mail, Linkedin, Github, Copy, Check, ArrowUpRight, Send } from 'lucide-
 export const ContactSection: React.FC = () => {
   const [copied, setCopied] = useState(false);
   const email = 'aradhyulavamsikiran@gmail.com';
+  const linkedinUrl = 'https://www.linkedin.com/in/aradhyula-vamsi-kiran-016a9229a/';
+  const githubUrl = 'https://github.com/vamsikiran01';
 
   const copyEmail = () => {
     navigator.clipboard.writeText(email);
@@ -17,7 +19,7 @@ export const ContactSection: React.FC = () => {
     <section
       id="contact"
       aria-label="Contact Aradhyula Vamsi Kiran"
-      className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-zinc-800/80"
+      className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-zinc-800/80 relative z-10"
     >
       <div className="mb-14">
         <div
@@ -60,11 +62,11 @@ export const ContactSection: React.FC = () => {
           </p>
 
           {/* Action Row */}
-          <div className="flex flex-wrap items-center gap-4 pt-2">
+          <div className="flex flex-wrap items-center gap-4 pt-2 relative z-20">
             {/* Mailto link button */}
             <a
               href={`mailto:${email}`}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#ff3b2f] hover:bg-[#e03025] text-white font-mono text-xs uppercase font-semibold tracking-wider transition-all duration-150 shadow-[0_0_20px_rgba(255,59,47,0.35)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#ff3b2f] hover:bg-[#e03025] text-white font-mono text-xs uppercase font-semibold tracking-wider transition-all duration-150 shadow-[0_0_20px_rgba(255,59,47,0.35)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white cursor-pointer"
             >
               <Send className="w-4 h-4" />
               <span>Send Email</span>
@@ -73,7 +75,7 @@ export const ContactSection: React.FC = () => {
             {/* Copy button */}
             <button
               onClick={copyEmail}
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700 font-mono text-xs tracking-wider transition-all duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff3b2f]"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700 font-mono text-xs tracking-wider transition-all duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff3b2f] cursor-pointer"
             >
               {copied ? (
                 <>
@@ -91,38 +93,40 @@ export const ContactSection: React.FC = () => {
         </div>
       </div>
 
-      {/* Social Links Row */}
+      {/* Social Links Row with Verified Working URLs */}
       <div
         data-build="pop"
-        className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl mb-20"
+        className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl mb-20 relative z-30"
       >
+        {/* LinkedIn Button */}
         <a
-          href="https://linkedin.com/in/aradhyulavamsikiran"
+          href={linkedinUrl}
           target="_blank"
-          rel="noreferrer"
-          className="flex items-center justify-between p-4 rounded-xl bg-zinc-950 border border-zinc-800 hover:border-[#ff3b2f]/50 transition-colors group"
+          rel="noopener noreferrer"
+          className="flex items-center justify-between p-4 rounded-xl bg-zinc-950 border border-zinc-800 hover:border-[#ff3b2f]/60 hover:bg-zinc-900/80 transition-all group cursor-pointer shadow-sm active:scale-[0.98]"
         >
           <div className="flex items-center gap-3">
             <Linkedin className="w-5 h-5 text-zinc-400 group-hover:text-[#ff3b2f] transition-colors" />
             <div>
-              <div className="text-sm font-semibold text-white">LinkedIn</div>
-              <div className="text-xs font-mono text-zinc-400">Professional Profile</div>
+              <div className="text-sm font-semibold text-white group-hover:text-[#ff3b2f] transition-colors">LinkedIn</div>
+              <div className="text-xs font-mono text-zinc-400">aradhyula-vamsi-kiran</div>
             </div>
           </div>
           <ArrowUpRight className="w-4 h-4 text-zinc-400 group-hover:text-white transition-colors" />
         </a>
 
+        {/* GitHub Button */}
         <a
-          href="https://github.com/aradhyulavamsikiran"
+          href={githubUrl}
           target="_blank"
-          rel="noreferrer"
-          className="flex items-center justify-between p-4 rounded-xl bg-zinc-950 border border-zinc-800 hover:border-[#ff3b2f]/50 transition-colors group"
+          rel="noopener noreferrer"
+          className="flex items-center justify-between p-4 rounded-xl bg-zinc-950 border border-zinc-800 hover:border-[#ff3b2f]/60 hover:bg-zinc-900/80 transition-all group cursor-pointer shadow-sm active:scale-[0.98]"
         >
           <div className="flex items-center gap-3">
             <Github className="w-5 h-5 text-zinc-400 group-hover:text-[#ff3b2f] transition-colors" />
             <div>
-              <div className="text-sm font-semibold text-white">GitHub</div>
-              <div className="text-xs font-mono text-zinc-400">Open Source &amp; Code</div>
+              <div className="text-sm font-semibold text-white group-hover:text-[#ff3b2f] transition-colors">GitHub</div>
+              <div className="text-xs font-mono text-zinc-400">vamsikiran01</div>
             </div>
           </div>
           <ArrowUpRight className="w-4 h-4 text-zinc-400 group-hover:text-white transition-colors" />

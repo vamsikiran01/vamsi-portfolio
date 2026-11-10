@@ -1,14 +1,16 @@
 'use client';
 
 import React from 'react';
-import { ExternalLink, Github, Sparkles, Terminal, Database, Brain, ArrowUpRight } from 'lucide-react';
+import { Github, Database, Brain, ArrowUpRight } from 'lucide-react';
 
 export const WorkSection: React.FC = () => {
+  const githubUrl = 'https://github.com/vamsikiran01';
+
   return (
     <section
       id="work"
       aria-label="Work that ships"
-      className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-zinc-800/80"
+      className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-zinc-800/80 relative z-10"
     >
       {/* Section Header */}
       <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-16 gap-8">
@@ -80,19 +82,19 @@ export const WorkSection: React.FC = () => {
             </div>
 
             {/* Links */}
-            <div className="flex items-center gap-3 pt-2 sm:pt-0">
+            <div className="flex items-center gap-3 pt-2 sm:pt-0 relative z-20">
               <a
-                href="https://github.com/aradhyulavamsikiran"
+                href={githubUrl}
                 target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700/80 text-xs font-mono transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff3b2f]"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700/80 text-xs font-mono transition-all active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff3b2f]"
               >
                 <Github className="w-3.5 h-3.5" />
                 <span>Code</span>
               </a>
               <a
                 href="#contact"
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-[#ff3b2f] hover:bg-[#e03025] text-white text-xs font-mono font-semibold transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-[#ff3b2f] hover:bg-[#e03025] text-white text-xs font-mono font-semibold transition-all active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
               >
                 <span>Live Demo</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
@@ -173,19 +175,19 @@ export const WorkSection: React.FC = () => {
             </div>
 
             {/* Links */}
-            <div className="flex items-center gap-3 pt-2 sm:pt-0">
+            <div className="flex items-center gap-3 pt-2 sm:pt-0 relative z-20">
               <a
-                href="https://github.com/aradhyulavamsikiran"
+                href={githubUrl}
                 target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700/80 text-xs font-mono transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff3b2f]"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700/80 text-xs font-mono transition-all active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff3b2f]"
               >
                 <Github className="w-3.5 h-3.5" />
                 <span>Code</span>
               </a>
               <a
                 href="#contact"
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-[#ff3b2f] hover:bg-[#e03025] text-white text-xs font-mono font-semibold transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-[#ff3b2f] hover:bg-[#e03025] text-white text-xs font-mono font-semibold transition-all active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
               >
                 <span>Live Demo</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
