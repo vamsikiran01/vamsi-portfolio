@@ -63,7 +63,7 @@ export const Hero: React.FC = () => {
             data-build="type"
             className="text-xs sm:text-sm text-zinc-300 font-sans leading-relaxed max-w-md"
           >
-            AI/ML graduate (B.Tech AIML, 2026) experienced in AI-powered application development, advanced prompt engineering, and autonomous LLM-driven workflows. Passionate about building reliable software through clean, adaptable thinking.
+            AI/ML graduate (B.Tech AIML, 2026) focused on generative and agentic AI. Built an LLM-powered mental health journal analysis app with Gemini Flash structured function calling, a Supabase backend, and client-side NLP. Skilled in Python, prompt engineering, NLP, RAG, LangChain, and LangGraph.
           </p>
 
           {/* Actions: View Work Button & Resume */}

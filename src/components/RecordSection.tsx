@@ -1,7 +1,40 @@
 'use client';
 
 import React from 'react';
-import { Briefcase, GraduationCap, Award, Calendar, CheckCircle2 } from 'lucide-react';
+import { Briefcase, GraduationCap, Award, Calendar, CheckCircle2, ArrowUpRight } from 'lucide-react';
+
+const CERTIFICATIONS = [
+  {
+    title: 'NVIDIA: Prompt Engineering and Data Analysis',
+    platform: 'Coursera',
+    date: 'May 20, 2026',
+    url: 'https://www.coursera.org/account/accomplishments/certificate/EKC6907WD4DS',
+  },
+  {
+    title: 'Generative AI: Introduction and Applications',
+    platform: 'Coursera',
+    date: 'May 11, 2024',
+    url: 'https://www.coursera.org/account/accomplishments/verify/S9APDECENE79',
+  },
+  {
+    title: 'Python Basics — Core Programming Foundations',
+    platform: 'Coursera',
+    date: 'Nov 29, 2024',
+    url: 'https://www.coursera.org/account/accomplishments/certificate/LVZF57BSTEWQ',
+  },
+  {
+    title: 'HTML, CSS and JavaScript for Web Developers',
+    platform: 'Coursera',
+    date: 'May 7, 2024',
+    url: 'https://www.coursera.org/account/accomplishments/certificate/RBVDRDLPB4LB',
+  },
+  {
+    title: 'Introduction to Databases for Back-end Development',
+    platform: 'Coursera',
+    date: 'Dec 17, 2024',
+    url: 'https://www.coursera.org/account/accomplishments/certificate/YUZZQN41YG6M',
+  },
+];
 
 export const RecordSection: React.FC = () => {
   return (
@@ -128,8 +161,11 @@ export const RecordSection: React.FC = () => {
                   </h4>
                   <span className="font-mono text-xs text-[#ff3b2f]">2022 – 2026</span>
                 </div>
-                <div className="font-mono text-xs text-zinc-300">
-                  Nadimpalli Satyanarayana Raju Institute of Technology (NSRIT)
+                <div className="font-mono text-xs text-zinc-300 flex items-center justify-between flex-wrap gap-2">
+                  <span>Nadimpalli Satyanarayana Raju Institute of Technology (NSRIT)</span>
+                  <span className="text-xs font-mono font-bold text-white bg-zinc-900 border border-zinc-700/80 px-2 py-0.5 rounded">
+                    CGPA: 8.51
+                  </span>
                 </div>
                 <div className="text-xs text-zinc-400 mt-1">Visakhapatnam, Andhra Pradesh</div>
               </div>
@@ -153,7 +189,7 @@ export const RecordSection: React.FC = () => {
             </div>
           </div>
 
-          {/* 5 Certifications from Resume */}
+          {/* 5 Verified Certifications with Live Credentials & Dates */}
           <div>
             <div className="flex items-center gap-2 border-b border-zinc-800 pb-3 mb-6">
               <Award className="w-5 h-5 text-[#ff3b2f]" />
@@ -163,23 +199,33 @@ export const RecordSection: React.FC = () => {
             </div>
 
             <div data-build="pop" className="grid grid-cols-1 gap-2.5">
-              {[
-                { title: 'NVIDIA: Prompt Engineering and Data Analysis', org: 'NVIDIA' },
-                { title: 'Generative AI: Introduction and Applications', org: 'Industry Program' },
-                { title: 'Python Basics — Core Programming Foundations', org: 'Technical Certification' },
-                { title: 'HTML, CSS and JavaScript for Web Developers', org: 'Full-Stack Development' },
-                { title: 'Introduction to Databases for Back-end Development', org: 'Database Architecture' },
-              ].map((cert) => (
-                <div
+              {CERTIFICATIONS.map((cert) => (
+                <a
                   key={cert.title}
-                  className="flex items-center gap-3 p-3 rounded-lg bg-zinc-950 border border-zinc-800/80 hover:border-[#ff3b2f]/40 transition-colors"
+                  href={cert.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between gap-3 p-3.5 rounded-lg bg-zinc-950 border border-zinc-800/80 hover:border-[#ff3b2f]/60 hover:bg-zinc-900/60 transition-all duration-150 group cursor-pointer"
+                  title={`View verified certificate on ${cert.platform}`}
                 >
-                  <CheckCircle2 className="w-4 h-4 text-[#ff3b2f] flex-shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <div className="text-xs font-semibold text-zinc-200 truncate">{cert.title}</div>
-                    <div className="text-[10px] font-mono text-zinc-300">{cert.org}</div>
+                  <div className="flex items-center gap-3 min-w-0">
+                    <CheckCircle2 className="w-4 h-4 text-[#ff3b2f] flex-shrink-0 group-hover:scale-110 transition-transform" />
+                    <div className="min-w-0">
+                      <div className="text-xs sm:text-sm font-semibold text-zinc-200 group-hover:text-white transition-colors truncate">
+                        {cert.title}
+                      </div>
+                      <div className="flex items-center gap-2 text-[11px] font-mono text-zinc-400 mt-0.5">
+                        <span className="text-[#ff3b2f] font-semibold">{cert.platform}</span>
+                        <span>•</span>
+                        <span>Completed: {cert.date}</span>
+                      </div>
+                    </div>
                   </div>
-                </div>
+                  <div className="flex items-center gap-1 text-[11px] font-mono text-zinc-400 group-hover:text-[#ff3b2f] flex-shrink-0 transition-colors">
+                    <span className="hidden sm:inline">Verify</span>
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </div>
+                </a>
               ))}
             </div>
           </div>

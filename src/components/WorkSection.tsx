@@ -93,7 +93,9 @@ export const WorkSection: React.FC = () => {
                 <span>Code</span>
               </a>
               <a
-                href="#contact"
+                href="https://emotions-tracker-six.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-[#ff3b2f] hover:bg-[#e03025] text-white text-xs font-mono font-semibold transition-all active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
               >
                 <span>Live Demo</span>
@@ -107,25 +109,25 @@ export const WorkSection: React.FC = () => {
             <li className="flex items-start gap-2.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#ff3b2f] mt-2 flex-shrink-0" />
               <span>
-                Developed an AI-powered journal emotion analysis application using the Gemini Flash API and curated text datasets to classify journal entries into emotional categories such as anxiety, depression, and neutral through text data.
+                Built an LLM-powered journal emotion analysis app: text or voice entries are analysed by Gemini Flash via a Supabase Edge Function with structured function calling, returning emotion, confidence and insights.
               </span>
             </li>
             <li className="flex items-start gap-2.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#ff3b2f] mt-2 flex-shrink-0" />
               <span>
-                Crafted and implemented the complete workflow including advanced prompting strategies (zero-shot, few-shot, and chain-of-thought), journaling interface, emotion insights dashboard, and history tracking system for structured wellness monitoring and analysis.
+                Engineered chain-of-thought prompting and prompt chaining with context from Kaggle &ldquo;Sentiment Analysis for Mental Health&rdquo; dataset (51,000+ entries, 7 classes); Compromise.js for client-side NLP.
               </span>
             </li>
             <li className="flex items-start gap-2.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#ff3b2f] mt-2 flex-shrink-0" />
               <span>
-                Engineered robust prompt chains with role prompting, output formatting, and LLM parameter tuning to ensure consistent JSON responses and high analytical accuracy.
+                Crafted rule-based fallback engine for API downtime, explainability heatmap, CBT cognitive-distortion detection, and a mood dashboard with streaks and trends.
               </span>
             </li>
             <li className="flex items-start gap-2.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#ff3b2f] mt-2 flex-shrink-0" />
               <span>
-                Leveraged NLP libraries including Scikit-learn, NLTK, and spaCy to pre-process textual inputs and benchmark emotion classification patterns.
+                Evaluated rule-based NLP fallback engine on 350 balanced samples (50 per class) from Kaggle dataset: 58.3% accuracy and 60.2% macro-F1 across 7 classes.
               </span>
             </li>
           </ul>
@@ -133,16 +135,16 @@ export const WorkSection: React.FC = () => {
           {/* Tech Chips */}
           <div className="flex flex-wrap gap-2 pt-2 border-t border-zinc-900">
             {[
+              'React',
+              'TypeScript',
+              'Tailwind CSS',
+              'Supabase Edge Functions',
+              'PostgreSQL',
               'Gemini Flash API',
-              'Python',
+              'Compromise.js',
+              'Recharts',
               'Prompt Engineering',
-              'Chain-of-thought',
-              'Few-shot',
-              'Zero-shot',
               'NLP',
-              'Scikit-learn',
-              'NLTK',
-              'spaCy',
             ].map((tech) => (
               <span
                 key={tech}
@@ -154,7 +156,7 @@ export const WorkSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Project 2: Library Management System */}
+        {/* Project 2: Library Management System (Readora) */}
         <div
           data-build="pop"
           className="p-6 sm:p-8 rounded-2xl bg-zinc-950/70 border border-zinc-800/80 hover:border-[#ff3b2f]/50 transition-all duration-200 group relative"
@@ -166,10 +168,10 @@ export const WorkSection: React.FC = () => {
               </span>
               <div>
                 <span className="font-mono text-[11px] text-[#ff3b2f] tracking-wider uppercase font-semibold">
-                  FULL-STACK DJANGO // MAY 2025
+                  FULL-STACK DJANGO // JUN &ndash; JUL 2025
                 </span>
                 <h3 className="font-anton text-2xl sm:text-3xl text-white uppercase tracking-tight group-hover:text-[#ff3b2f] transition-colors">
-                  Library Management System
+                  Library Management System (Readora)
                 </h3>
               </div>
             </div>
@@ -186,7 +188,9 @@ export const WorkSection: React.FC = () => {
                 <span>Code</span>
               </a>
               <a
-                href="#contact"
+                href="https://readora-5qfw.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-[#ff3b2f] hover:bg-[#e03025] text-white text-xs font-mono font-semibold transition-all active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
               >
                 <span>Live Demo</span>
@@ -200,19 +204,19 @@ export const WorkSection: React.FC = () => {
             <li className="flex items-start gap-2.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#ff3b2f] mt-2 flex-shrink-0" />
               <span>
-                Built a full-stack Library Management System using Django, HTML, CSS, JavaScript, and SQLite with user authentication, admin dashboard, and book return reminders.
+                Django MVT application with three core models (role-based users, books, issued books); loan rules by role (14 days students, 30 days faculty) and an automatic &#8377;10/day overdue fine.
               </span>
             </li>
             <li className="flex items-start gap-2.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#ff3b2f] mt-2 flex-shrink-0" />
               <span>
-                Developed a full-stack Django web application with complete CRUD operations, role-based administrative control, user authentication, and database-driven book catalog management.
+                Integrated Google Books ISBN auto-fetch, QR-code receipts, 12 in-browser PDF textbooks, due-soon and overdue reminders with email alerts, and an analytics dashboard.
               </span>
             </li>
             <li className="flex items-start gap-2.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#ff3b2f] mt-2 flex-shrink-0" />
               <span>
-                Applied structured AI-driven thinking to map complex software requirements into systematic, testable application workflows.
+                UI design and frontend development (login, register, book issue, catalog search, reminders pages) built with Django, HTML, CSS, JavaScript, and Tailwind CSS. Deployed on Vercel.
               </span>
             </li>
           </ul>
@@ -222,13 +226,13 @@ export const WorkSection: React.FC = () => {
             {[
               'Django',
               'SQLite',
-              'Python',
               'HTML5',
               'CSS3',
+              'Tailwind CSS',
               'JavaScript',
-              'User Authentication',
-              'CRUD Operations',
-              'Admin Dashboard',
+              'Chart.js',
+              'Google Books API',
+              'Vercel',
             ].map((tech) => (
               <span
                 key={tech}
