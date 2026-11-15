@@ -84,10 +84,11 @@ export const WorkSection: React.FC = () => {
             {/* Links */}
             <div className="flex items-center gap-3 pt-2 sm:pt-0 relative z-20">
               <a
-                href={githubUrl}
+                href="https://github.com/vamsikiran01/emotions-tracker"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700/80 text-xs font-mono transition-all active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff3b2f]"
+                title="View emotions-tracker source code on GitHub"
               >
                 <Github className="w-3.5 h-3.5" />
                 <span>Code</span>
@@ -179,10 +180,11 @@ export const WorkSection: React.FC = () => {
             {/* Links */}
             <div className="flex items-center gap-3 pt-2 sm:pt-0 relative z-20">
               <a
-                href={githubUrl}
+                href="https://github.com/vamsikiran01/readora"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700/80 text-xs font-mono transition-all active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff3b2f]"
+                title="View readora source code on GitHub"
               >
                 <Github className="w-3.5 h-3.5" />
                 <span>Code</span>
