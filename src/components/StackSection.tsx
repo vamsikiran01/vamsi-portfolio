@@ -23,7 +23,9 @@ const STACK_ITEMS = [
 
   // AI / ML & NLP
   { name: 'Gemini Flash API', category: 'AI & LLM' },
+  { name: 'Gemini Embeddings', category: 'AI & LLM' },
   { name: 'RAG Pipelines', category: 'AI & LLM' },
+  { name: 'n8n Workflows', category: 'Agentic AI' },
   { name: 'LangChain', category: 'Agentic AI' },
   { name: 'LangGraph', category: 'Agentic AI' },
   { name: 'LLM Workflows', category: 'Agentic AI' },
@@ -42,7 +44,7 @@ const STACK_ITEMS = [
 
   // Web & Backend
   { name: 'Django', category: 'Backend' },
-  { name: 'Supabase', category: 'Backend' },
+  { name: 'Supabase (pgvector)', category: 'Backend' },
   { name: 'SQLite', category: 'Database' },
   { name: 'PostgreSQL', category: 'Database' },
 

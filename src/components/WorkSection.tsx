@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Github, Database, Brain, ArrowUpRight } from 'lucide-react';
+import { Github, Database, Brain, ArrowUpRight, Bot } from 'lucide-react';
 
 export const WorkSection: React.FC = () => {
   const githubUrl = 'https://github.com/vamsikiran01';
@@ -36,7 +36,7 @@ export const WorkSection: React.FC = () => {
             data-build="type"
             className="text-xs sm:text-sm text-zinc-300 font-sans"
           >
-            Engineered with rigorous NLP pipelines, prompt architectures, and full-stack reliability.
+            Engineered with automated RAG pipelines, NLP emotion detection, and full-stack reliability.
           </p>
 
           <div
@@ -44,7 +44,7 @@ export const WorkSection: React.FC = () => {
             className="grid grid-cols-3 gap-3 pt-2 border-t border-zinc-800/80"
           >
             <div>
-              <div className="font-anton text-xl sm:text-2xl text-white">2</div>
+              <div className="font-anton text-xl sm:text-2xl text-white">3</div>
               <div className="font-mono text-[10px] text-zinc-300 uppercase">Core Systems</div>
             </div>
             <div>
@@ -61,7 +61,7 @@ export const WorkSection: React.FC = () => {
 
       {/* Projects List: Text Cards (no screenshots, 3-4 bullet points, chips, links) */}
       <div className="space-y-8">
-        {/* Project 1: Mental Health Detection Using NLP */}
+        {/* Project 1: No-Code RAG Agent — SOP Chatbot */}
         <div
           data-build="pop"
           className="p-6 sm:p-8 rounded-2xl bg-zinc-950/70 border border-zinc-800/80 hover:border-[#ff3b2f]/50 transition-all duration-200 group relative"
@@ -69,11 +69,83 @@ export const WorkSection: React.FC = () => {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-zinc-800/80 pb-4 mb-6">
             <div className="flex items-center gap-3">
               <span className="p-2 rounded-lg bg-red-950/50 border border-red-800/40 text-[#ff3b2f]">
+                <Bot className="w-5 h-5" />
+              </span>
+              <div>
+                <span className="font-mono text-[11px] text-[#ff3b2f] tracking-wider uppercase font-semibold">
+                  AGENTIC AI &amp; RAG // NOV 2026
+                </span>
+                <h3 className="font-anton text-2xl sm:text-3xl text-white uppercase tracking-tight group-hover:text-[#ff3b2f] transition-colors">
+                  No-Code RAG Agent — SOP Chatbot
+                </h3>
+              </div>
+            </div>
+
+            {/* Links */}
+            <div className="flex items-center gap-3 pt-2 sm:pt-0 relative z-20">
+              <a
+                href="https://github.com/vamsikiran01/nexacore-sop-n8n"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-700/80 text-xs font-mono transition-all active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff3b2f]"
+                title="View nexacore-sop-n8n source code on GitHub"
+              >
+                <Github className="w-3.5 h-3.5" />
+                <span>Code</span>
+              </a>
+            </div>
+          </div>
+
+          {/* Bullet Points strictly from resume */}
+          <ul className="space-y-3 font-sans text-xs sm:text-sm text-zinc-300 mb-6">
+            <li className="flex items-start gap-2.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ff3b2f] mt-2 flex-shrink-0" />
+              <span>
+                Built an automated n8n RAG pipeline ingesting company SOPs from Google Drive into a Supabase vector database.
+              </span>
+            </li>
+            <li className="flex items-start gap-2.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ff3b2f] mt-2 flex-shrink-0" />
+              <span>
+                Engineered a Gemini-powered SOP chatbot with tuned retrieval limits and context window memory to deliver fast, accurate policy answers.
+              </span>
+            </li>
+          </ul>
+
+          {/* Tech Chips */}
+          <div className="flex flex-wrap gap-2 pt-2 border-t border-zinc-900">
+            {[
+              'n8n',
+              'Google Gemini API',
+              'Gemini Embeddings',
+              'Supabase (pgvector)',
+              'Google Drive',
+              'RAG Pipelines',
+              'Context Window Memory',
+            ].map((tech) => (
+              <span
+                key={tech}
+                className="px-2.5 py-1 rounded bg-zinc-900 border border-zinc-800 text-zinc-300 font-mono text-[11px]"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Project 2: Mental Health Detection Using NLP */}
+        <div
+          data-build="pop"
+          className="p-6 sm:p-8 rounded-2xl bg-zinc-950/70 border border-zinc-800/80 hover:border-[#ff3b2f]/50 transition-all duration-200 group relative"
+        >
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-zinc-800/80 pb-4 mb-6">
+            <div className="flex items-center gap-3">
+              <span className="p-2 rounded-lg bg-zinc-900 border border-zinc-700/60 text-zinc-300 group-hover:text-[#ff3b2f] transition-colors">
                 <Brain className="w-5 h-5" />
               </span>
               <div>
                 <span className="font-mono text-[11px] text-[#ff3b2f] tracking-wider uppercase font-semibold">
-                  FINAL YEAR PROJECT // MAR 2026
+                  FINAL YEAR PROJECT // JAN – MAR 2026
                 </span>
                 <h3 className="font-anton text-2xl sm:text-3xl text-white uppercase tracking-tight group-hover:text-[#ff3b2f] transition-colors">
                   Mental Health Detection Using NLP
@@ -105,30 +177,18 @@ export const WorkSection: React.FC = () => {
             </div>
           </div>
 
-          {/* 3 to 4 Bullet Points strictly from resume */}
+          {/* Bullet Points strictly from resume */}
           <ul className="space-y-3 font-sans text-xs sm:text-sm text-zinc-300 mb-6">
             <li className="flex items-start gap-2.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#ff3b2f] mt-2 flex-shrink-0" />
               <span>
-                Built an LLM-powered journal emotion analysis app: text or voice entries are analysed by Gemini Flash via a Supabase Edge Function with structured function calling, returning emotion, confidence and insights.
+                Built an LLM-powered journal emotion analysis app: text or voice entries are analysed by Gemini Flash via a Supabase Edge Function with structured function calling, chain-of-thought prompting and prompt chaining (context from the Kaggle &ldquo;Sentiment Analysis for Mental Health&rdquo; dataset: 51,000+ entries, 7 classes), returning emotion, confidence and insights; Compromise.js for client-side NLP.
               </span>
             </li>
             <li className="flex items-start gap-2.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#ff3b2f] mt-2 flex-shrink-0" />
               <span>
-                Engineered chain-of-thought prompting and prompt chaining with context from Kaggle &ldquo;Sentiment Analysis for Mental Health&rdquo; dataset (51,000+ entries, 7 classes); Compromise.js for client-side NLP.
-              </span>
-            </li>
-            <li className="flex items-start gap-2.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#ff3b2f] mt-2 flex-shrink-0" />
-              <span>
-                Crafted rule-based fallback engine for API downtime, explainability heatmap, CBT cognitive-distortion detection, and a mood dashboard with streaks and trends.
-              </span>
-            </li>
-            <li className="flex items-start gap-2.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#ff3b2f] mt-2 flex-shrink-0" />
-              <span>
-                Evaluated rule-based NLP fallback engine on 350 balanced samples (50 per class) from Kaggle dataset: 58.3% accuracy and 60.2% macro-F1 across 7 classes.
+                Rule-based fallback engine for API downtime, explainability heatmap, CBT cognitive-distortion detection and a mood dashboard with streaks and trends; evaluated on 350 balanced samples (50 per class) from the Kaggle dataset: 58.3% accuracy and 60.2% macro-F1 across 7 classes.
               </span>
             </li>
           </ul>
@@ -157,7 +217,7 @@ export const WorkSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Project 2: Library Management System (Readora) */}
+        {/* Project 3: Library Management System (Readora) */}
         <div
           data-build="pop"
           className="p-6 sm:p-8 rounded-2xl bg-zinc-950/70 border border-zinc-800/80 hover:border-[#ff3b2f]/50 transition-all duration-200 group relative"
@@ -201,24 +261,18 @@ export const WorkSection: React.FC = () => {
             </div>
           </div>
 
-          {/* 3 to 4 Bullet Points strictly from resume */}
+          {/* Bullet Points strictly from resume */}
           <ul className="space-y-3 font-sans text-xs sm:text-sm text-zinc-300 mb-6">
             <li className="flex items-start gap-2.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#ff3b2f] mt-2 flex-shrink-0" />
               <span>
-                Django MVT application with three core models (role-based users, books, issued books); loan rules by role (14 days students, 30 days faculty) and an automatic &#8377;10/day overdue fine.
+                Django MVT app with three core models (role-based users, books, issued books); loan rules by role (14 days students, 30 days faculty), automatic &#8377;10/day overdue fine, Google Books ISBN auto-fetch, QR-code receipts, 12 in-browser PDF textbooks, due-soon and overdue reminders with email alerts, analytics dashboard.
               </span>
             </li>
             <li className="flex items-start gap-2.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#ff3b2f] mt-2 flex-shrink-0" />
               <span>
-                Integrated Google Books ISBN auto-fetch, QR-code receipts, 12 in-browser PDF textbooks, due-soon and overdue reminders with email alerts, and an analytics dashboard.
-              </span>
-            </li>
-            <li className="flex items-start gap-2.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#ff3b2f] mt-2 flex-shrink-0" />
-              <span>
-                UI design and frontend development (login, register, book issue, catalog search, reminders pages) built with Django, HTML, CSS, JavaScript, and Tailwind CSS. Deployed on Vercel.
+                My contribution: UI design and frontend (login, register, book issue, catalog search, reminders pages); backend built by teammate. Deployed on Vercel.
               </span>
             </li>
           </ul>
@@ -231,7 +285,6 @@ export const WorkSection: React.FC = () => {
               'HTML5',
               'CSS3',
               'Tailwind CSS',
-              'JavaScript',
               'Chart.js',
               'Google Books API',
               'Vercel',
